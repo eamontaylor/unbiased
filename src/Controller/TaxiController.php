@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Taxi;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Form\TaxiBooking;
 
 class TaxiController extends AbstractController
@@ -17,22 +19,26 @@ class TaxiController extends AbstractController
     {
         $taxi = new Taxi();
         $form = $this->createForm(TaxiBooking::class, $taxi);
-
+        $form->add('submit', SubmitType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
-            $taxi = $form->getData();
+             $entityManager = $this->getDoctrine()->getManager();
+             $entityManager->persist($form->getData());
+             $entityManager->flush();
 
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($task);
-            // $entityManager->flush();
+            $mailer = new Swift_Mailer();
 
-            return $this->redirectToRoute('task_success');
+            // Create the message
+            $message = (new \Swift_Message('Unbiased Airport Taxis'))
+                ->setFrom(['eamonweb@gmail.com' => 'Eamon Taylor'])
+                ->setTo('eamonweb@gmail.com')
+                ->setBody($this->renderView('emails/booking.html.twig'),'text/html');
+
+            $mailer->send($message);
+
+            return $this->redirectToRoute('taxi');
         }
 
         return $this->render('taxi/index.html.twig', array(

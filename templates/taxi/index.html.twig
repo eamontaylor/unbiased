@@ -9,8 +9,19 @@
 <div class="example-wrapper">
 
     {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-    {{ form_widget(form) }}
+
+        {{ form_row(form.fullName) }}
+        {{ form_row(form.mobileNumber) }}
+        {{ form_row(form.dateOfArrival) }}
+        {{ form_row(form.airport) }}
+        {{ form_row(form.terminal) }}
+        {{ form_row(form.flightNumber) }}
+
+        {#<input type="submit" class="btn" value="Book Taxi" />#}
+
+
     {{ form_end(form) }}
 
 </div>
+
 {% endblock %}
