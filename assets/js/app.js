@@ -12,37 +12,53 @@ require('../css/app.scss');
 const $ = require('jquery');
 
 require('bootstrap');
-//require('bootstrap-datepicker');
+require('bootstrap-datepicker');
 
 
 $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
 
     $('.js-datepicker').datepicker({
-        format: 'yyyy-mm-dd'
+        format: 'dd-mm-yyyy'
     });
 });
 
-var $terminal = $('#taxi_booking_airport');
-// When airport gets selected ...
-$terminal.change(function() {
-    // ... retrieve the corresponding form.
-    var $form = $(this).closest('form');
-    // Simulate form data, but only include the selected airport value.
-    var data = {};
-    data[$terminal.attr('name')] = $terminal.val();
-    // Submit data via AJAX to the form's action path.
-    $.ajax({
-        url : $form.attr('action'),
-        type: $form.attr('method'),
-        data : data,
-        success: function(html) {
-            // Replace current terminal field ...
-            $('#taxi_booking_terminal').replaceWith(
-                // ... with the returned one from the AJAX response.
-                $(html).find('#taxi_booking_terminal')
-            );
-            // Terminal field now displays the appropriate terminals.
-        }
-    });
+// var $terminal = $('#taxi_booking_airport');
+// // When airport gets selected ...
+// $terminal.change(function() {
+//     // ... retrieve the corresponding form.
+//     var $form = $(this).closest('form');
+//     // Simulate form data, but only include the selected airport value.
+//     var data = {};
+//     data[$terminal.attr('name')] = $terminal.val();
+//     // Submit data via AJAX to the form's action path.
+//     $.ajax({
+//         url : $form.attr('action'),
+//         type: $form.attr('method'),
+//         data : data,
+//         success: function(html) {
+//             // Replace current terminal field ...
+//             $('#taxi_booking_terminal').replaceWith(
+//                 // ... with the returned one from the AJAX response.
+//                 $(html).find('#taxi_booking_terminal')
+//             );
+//             // Terminal field now displays the appropriate terminals.
+//         }
+//     });
+// });
+$("#taxi_booking_terminal").hide()
+
+$('#taxi_booking_airport').on('change',function(){
+    var selection = $(this).val();
+    switch(selection){
+        case "heathrow":
+            $("#taxi_booking_terminal").show()
+            break;
+        default:
+            $("#taxi_booking_terminal").hide()
+    }
 });
+
+setTimeout(function() {
+    $('.alert-success').fadeOut('slow');
+}, 75000);

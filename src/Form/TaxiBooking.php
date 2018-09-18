@@ -12,27 +12,28 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use libphonenumber\PhoneNumberFormat;
-use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 
 class TaxiBooking extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fullName', TextType::class)
-            ->add('mobileNumber', PhoneNumberType::class, array(
-                'default_region' => 'GB',
-                //'widget' => PhoneNumberType::WIDGET_COUNTRY_CHOICE,
-                'country_choices' => array('GB'),
-               // 'preferred_country_choices' => array('GB')
+            ->add('fullName', TextType::class, array(
+                'label' => 'Full Name',
+            ))
+            ->add('mobileNumber', TextType::class, array(
+                'label' => 'Mobile Number',
             ))
             ->add('dateOfArrival', DateType::class, array(
+                'label' => 'Date of Arrival',
                 'widget' => 'single_text',
                 'html5' => false,
+                'format' => 'dd-MM-yyyy',
                 'attr' => ['class' => 'js-datepicker'],
             ))
             ->add('airport', ChoiceType::class, array(
+                'label' => 'Select Airport',
+                'placeholder' => 'Select',
                 'choices' => array(
                     'Heathrow' => 'heathrow',
                     'Gatwick' => 'gatwick',
@@ -47,13 +48,15 @@ class TaxiBooking extends AbstractType
                 $form = $event->getForm();
 
                 $form->add('terminal', ChoiceType::class, array(
+                    'label' => false,
+                    'placeholder' => 'Choose Terminal',
+                    'empty_data' => 'notsure',
                     'choices' => array(
-                        'Terminal1' => 'terminal1',
-                        'Terminal2' => 'terminal2',
-                        'Terminal3' => 'terminal3',
-                        'Terminal4' => 'terminal4',
-                        'notSure' => 'terminal4',
-
+                        'Not sure' => 'notsure',
+                        'Terminal 1' => 'terminal1',
+                        'Terminal 2' => 'terminal2',
+                        'Terminal 3' => 'terminal3',
+                        'Terminal 4' => 'terminal4',
                     ),
                 ));
             }

@@ -32,6 +32,7 @@ class Taxi
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @TaxiAssert\ContainsUKMobileNumber
      */
     public $mobileNumber;
 
@@ -50,9 +51,8 @@ class Taxi
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
      */
-    public $terminal;
+    public $terminal = 'none';
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -60,6 +60,7 @@ class Taxi
      * @TaxiAssert\ContainsFlightCode
      */
     public $flightNumber;
+
 
     public function getFullName()
     {
